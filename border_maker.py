@@ -11,7 +11,6 @@ twitter = Twitter()
 kkma = Kkma()
 
 def intruser(word, final_trans):
-    # ЗДЕСЬ НУЖНО БУДЕТ ПЕРЕФОРМИРОВЫВАТЬ СИНОКОРЕЙСКИЕ СЛОВА (ЗВОНКИЕ -> TENSE)
     ready_word = ''
     for char in word:
         ready_word += '-' + final_trans[char]
@@ -46,12 +45,31 @@ def separator(text, ft):
             else:
                 good_text += intruser(entity[0], ft) + ' / '
 
-        elif entity[1] == 'Adjective' or entity[1] == 'Verb':
+        elif entity[1] == 'Adjective':
             # проверяем, аттрибутивное или предикативное употребление
             if 'ETD' in kkma.pos(entity[0])[-1][1]:
                 good_text += intruser(entity[0], ft) + '#'
             else:
                 good_text += intruser(entity[0], ft) + ' / '
+        
+        elif entity[1] == 'Verb':
+
+            # проверка на грамматику, в которой нет озвончения
+            tr = intruser(entity[0], ft)
+            if 'ɾ-ke-' in tr:
+              # мы хотим заменить последнее вхождение такого куска
+              rtr = ''.join(reversed(list(tr)))
+              rtr.replace('-ek-ɾ', '-ek͈-ɾ', 1)
+              tr = ''.join(reversed(list(rtr)))
+
+            # проверяем, аттрибутивное или предикативное употребление
+            if 'ETD' in kkma.pos(entity[0])[-1][1]:
+                good_text +=  + '#'
+            else:
+                good_text += intruser(entity[0], ft) + ' / '
+            
+            
+                
 
         elif entity[1] == 'Punctuation':
             good_text = good_text.strip(" /-#") + ' / '
