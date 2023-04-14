@@ -90,9 +90,60 @@ with open('final_trans.csv', 'r', encoding='utf-8') as ft_file:
     for row in spamreader:
         final_trans[row[0]] = row[2]
 
-text = '예쁜 언니가 약하고 넉넉해요'
-print(separator(text, final_trans))
-print('')
+#text = '예쁜 언니가 약하고 넉넉해요'
+#print(separator(text, final_trans))
+#print('')
+
+def palatalization(given): # must be first!!
+    to_pal = ['k', 'g', 'l', 'ɾ', 'm', 'p', 's', 'ŋ', 'cʰ', 'kʰ', 'tʰ', 'pʰ', 
+              't', 'n', 'h', 'k͈', 't͈', 'p͈', 's͈', 'c͈']
+    
+    front_row = ['i', 'e']
+
+    for tp in to_pal:
+        # гласные переднего ряда
+        for fr in front_row:
+            given = given.replace(tp+'-'+fr, tp+'ʲ-'+fr)
+            given = given.replace(tp+fr, tp+'ʲ'+fr)
+
+        # йотированные гласные
+        given = given.replace(tp+'-j', tp+'ʲ-')
+    
+    return given
+    
+def liquids(given):
+    vowels = ['ɐ', 'ʌ', 'o', 'ɨ', 'u', 'i', 'ɛ', 'e']
+    given = given.replace('ɾ', 'l')
+    for v in vowels:
+        given = given.replace('l'+v, 'ɾ'+v)
+        given = given.replace('l-'+v, 'ɾ-'+v)
+        # нечитаемое ㅎ
+        given = given.replace('lh-'+v, 'ɾ-'+v)
+        given = given.replace('l-h'+v, 'ɾ-'+v)
+    return given
+
+
+def aspiration(given):
+    # ассимиляция по аспирации
+    to_fix_k = ['k-h', 'k͈-h', 'kʰ-h', 'h-k', 'h-k͈', 'h-kʰ']
+    to_fix_t = ['t-h', 't͈-h', 'tʰ-h', 'h-t', 'h-t͈', 'h-tʰ']
+    to_fix_c = ['c-h', 'c͈-h', 'cʰ-h', 'h-c', 'h-c͈', 'h-cʰ']
+
+    for k in to_fix_k:
+        given = given.replace(k, '-kʰ')
+    for t in to_fix_t:
+        given = given.replace(t, '-tʰ')
+    for c in to_fix_k:
+        given = given.replace(c, '-cʰ')
+    
+    # нечитаемый ㅎ (с ㄹ разобрались в liquids)
+    h_silent = ['m-h', 'n-h', 's-h', 's͈-h', 
+                'h-m', 'h-n', 'h-s', 'h-s͈']
+    for h in h_silent:
+        hh = h.replace('h', '')
+        given = given.replace(h, hh)
+
+    return given
 
 def stop_assim(chanks):
     sonors = ['m', 'n']
