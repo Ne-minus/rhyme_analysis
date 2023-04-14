@@ -124,24 +124,26 @@ def sonor_assim(chanks):
     final_sonor = ['m', 'ŋ']
     for i in range(len(chanks) - 1):
         if chanks[i][-1] == 'ɾ' and chanks[i + 1][0] == 'n':
-            chanks[i + 1] = 'ɾ' + chanks[i + 1][1:]
+            chanks[i] = chanks[i][:-1] + 'l'
+            chanks[i + 1] = 'l' + chanks[i + 1][1:]
             
         elif chanks[i][-1] == 'n' and chanks[i + 1][0] == 'ɾ':
-            chanks[i] = chanks[i][:-1] + 'ɾ'
+            chanks[i] = chanks[i][:-1] + 'l'
+            chanks[i + 1] = 'l' + chanks[i + 1][1:]
             
         elif chanks[i][-1] in final_sonor and chanks[i + 1][0] == 'ɾ':
             chanks[i + 1] = 'n' + chanks[i + 1][1:]
             
     return chanks
-
-text2 = '국립 막내'
-text3 = '몇 마리'
-text5 = '닭 넋만 신라'
-text6 = '디귿 리을'
-separated = separator(text5, final_trans)
-print(separated)
-words = separated.split('#')
-print('')
+#тесты
+#text2 = '국립 막내'
+#text3 = '몇 마리'
+#text5 = '닭 넋만 신라'
+#text6 = '디귿 리을'
+#separated = separator(text5, final_trans)
+#print(separated)
+#words = separated.split('#')
+#print('')
 
 for i in range(len(words)):
     #ассимиляция между слогами
