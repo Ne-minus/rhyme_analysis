@@ -2,7 +2,7 @@
 # СЛОВАМИ И СИНТАГМАМИ
 # подробнее: https://colab.research.google.com/drive/1F6rf_Difpv1sYtp2X1PNsvUi3ARu0b07#scrollTo=KE5t4CsRGmzl
 
-pip install konlpy
+#pip install konlpy
 from konlpy.tag import Twitter
 from konlpy.tag import Kkma
 import csv
@@ -37,7 +37,10 @@ def separator(text, ft):
     for entity in twit_morph:
         print(entity)
         if entity[1] in lil_morphs:
-            good_text = good_text.strip(" /-#") + '-' + intruser(entity[0], 
+            if entity[0] == '의':
+                good_text = good_text.strip(" /-#") + '-ɛ#' # генитив
+            else:
+                good_text = good_text.strip(" /-#") + '-' + intruser(entity[0], 
                                                                  ft) + '#'
 
         elif entity[1] in end_morphs:
@@ -70,8 +73,7 @@ def separator(text, ft):
                 good_text += intruser(entity[0], ft) + ' / '
             
             
-                
-
+              
         elif entity[1] == 'Punctuation':
             good_text = good_text.strip(" /-#") + ' / '
         elif entity[1] in bad:
