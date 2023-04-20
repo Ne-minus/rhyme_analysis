@@ -32,6 +32,7 @@ def aspiration(given):
     to_fix_k = ['k-h', 'k͈-h', 'kʰ-h', 'h-k', 'h-k͈', 'h-kʰ']
     to_fix_t = ['t-h', 't͈-h', 'tʰ-h', 'h-t', 'h-t͈', 'h-tʰ']
     to_fix_c = ['c-h', 'c͈-h', 'cʰ-h', 'h-c', 'h-c͈', 'h-cʰ']
+    to_fix_p = ['p-h', 'p͈-h', 'pʰ-h', 'h-p', 'h-p͈', 'h-pʰ']
 
     for k in to_fix_k:
         given = given.replace(k, '-kʰ')
@@ -39,6 +40,8 @@ def aspiration(given):
         given = given.replace(t, '-tʰ')
     for c in to_fix_k:
         given = given.replace(c, '-cʰ')
+    for p in to_fix_p:
+        given = given.replace(c, '-pʰ')
     
     # нечитаемый ㅎ (с ㄹ разобрались в liquids)
     h_silent = ['m-h', 'n-h', 's-h', 's͈-h', 
@@ -91,6 +94,22 @@ def sonor_assim(chanks):
             
     return chanks
 
+def sonority(given):
+    # я пока хз как быть с границами между словами, оставлю так пока что
+    vowels = ['ɐ', 'ʌ', 'o', 'ɨ', 'u', 'i', 'ɛ', 'e']
+    to_voice = {'c':'ɟ', 'k':'g', 't':'d', 'p':'b',
+                'cʲ':'ɟʲ', 'kʲ':'gʲ', 'tʲ':'dʲ', 'pʲ':'bʲ'}
+    for tv in to_voice.keys():
+        voiced = to_voice[tv]
+        for v1 in vowels:
+            for v2 in vowels:
+                given = given.replace(v1+tv+'-'+v2, v1+voiced+'-'+v2)
+                given = given.replace(v1+'-'+tv+v2, v1+'-'+voiced+v2)
+        given = given.replace('n'+'-'+tv, 'n'+'-'+voiced)
+        given = given.replace('m'+'-'+tv, 'm'+'-'+voiced)
+        given = given.replace('l'+'-'+tv, 'l'+'-'+voiced)
+
+    return given
 
 #for i in range(len(words)):
     #ассимиляция между слогами
