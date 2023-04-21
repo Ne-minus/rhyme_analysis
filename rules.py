@@ -1,4 +1,11 @@
-def palatalization(given): # must be first!!
+def exceptions(given): # must be first!!
+    # сюда можно записать все исключения (и ханчу и риыль тоже)
+
+    # 덕분에
+    given = given.replace('tʌk-pun-e', 't͈ʌk-pun-e')
+    return given
+
+def palatalization(given): # must be second!!
     to_pal = ['k', 'g', 'l', 'ɾ', 'm', 'p', 's', 'ŋ', 'cʰ', 'kʰ', 'tʰ', 'pʰ', 
               't', 'n', 'h', 'k͈', 't͈', 'p͈', 's͈', 'c͈']
     
@@ -94,7 +101,7 @@ def sonor_assim(chanks):
             
     return chanks
 
-def sonority(given):
+def voicing(given):
     # я пока хз как быть с границами между словами, оставлю так пока что
     vowels = ['ɐ', 'ʌ', 'o', 'ɨ', 'u', 'i', 'ɛ', 'e']
     to_voice = {'c':'ɟ', 'k':'g', 't':'d', 'p':'b',
@@ -108,6 +115,9 @@ def sonority(given):
         given = given.replace('n'+'-'+tv, 'n'+'-'+voiced)
         given = given.replace('m'+'-'+tv, 'm'+'-'+voiced)
         given = given.replace('l'+'-'+tv, 'l'+'-'+voiced)
+        given = given.replace('n'+'#'+tv, 'n'+'#'+voiced)
+        given = given.replace('m'+'#'+tv, 'm'+'#'+voiced)
+        given = given.replace('l'+'#'+tv, 'l'+'#'+voiced)
 
     return given
 

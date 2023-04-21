@@ -47,29 +47,36 @@ def separator(text, ft):
             else:
                 good_text += intruser(entity[0], ft) + ' / '
 
-        elif entity[1] == 'Adjective':
-            # проверяем, аттрибутивное или предикативное употребление
-            if 'ETD' in kkma.pos(entity[0])[-1][1]:
+        elif entity[1] == 'Adjective' or entity[1] == 'Verb':
+            # отглагольные существительные должны вести себя как
+            # существительные
+            if entity[0].endswith('ki'):
                 good_text += intruser(entity[0], ft) + '#'
             else:
-                good_text += intruser(entity[0], ft) + ' / '
-        
-        elif entity[1] == 'Verb':
+                tr = intruser(entity[0], ft)
+                if 'ɾ-ke-jo' in tr:
+                    # ㄹ게요
+                    rtr = ''.join(reversed(list(tr)))
+                    rtr = rtr.replace('ek-ɾ', 'ek͈-ɾ', 1)
+                    tr = ''.join(reversed(list(rtr)))
 
-            # проверка на грамматику, в которой нет озвончения
-            tr = intruser(entity[0], ft)
-            if 'ɾ-ke-' in tr:
-              # мы хотим заменить последнее вхождение такого куска
-              rtr = ''.join(reversed(list(tr)))
-              rtr.replace('-ek-ɾ', '-ek͈-ɾ', 1)
-              tr = ''.join(reversed(list(rtr)))
+                elif 'ɾ-kʌ-jɐ' in tr or 'ɾ-kʌ-je-jo' in tr:
+                    # ㄹ거(예요 / 야)
+                    rtr = ''.join(reversed(list(tr)))
+                    rtr = rtr.replace('ʌk-ɾ', 'ʌk͈-ɾ', 1)
+                    tr = ''.join(reversed(list(rtr)))
 
-            # проверяем, аттрибутивное или предикативное употребление
-            if 'ETD' in kkma.pos(entity[0])[-1][1]:
-                good_text +=  + '#'
-            else:
-                good_text += intruser(entity[0], ft) + ' / '
-            
+                elif 'm-tɐ-ko' in tr or 'm-tɐ /' in tr:
+                    # ㅁ다
+                    rtr = ''.join(reversed(list(tr)))
+                    rtr = rtr.replace('ɐt-m', 'ɐt͈-m', 1)
+                    tr = ''.join(reversed(list(rtr)))
+
+                # проверяем, аттрибутивное или предикативное употребление
+                if 'ETD' in kkma.pos(entity[0])[-1][1]:
+                    good_text += tr + '#'
+                else:
+                    good_text += tr + ' / '
             
               
         elif entity[1] == 'Punctuation':
