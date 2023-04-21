@@ -101,8 +101,7 @@ def sonor_assim(chanks):
             
     return chanks
 
-def voicing(given):
-    # я пока хз как быть с границами между словами, оставлю так пока что
+def voicing(given):      # должно быть после патчимов
     vowels = ['ɐ', 'ʌ', 'o', 'ɨ', 'u', 'i', 'ɛ', 'e']
     to_voice = {'c':'ɟ', 'k':'g', 't':'d', 'p':'b',
                 'cʲ':'ɟʲ', 'kʲ':'gʲ', 'tʲ':'dʲ', 'pʲ':'bʲ'}
@@ -118,6 +117,18 @@ def voicing(given):
         given = given.replace('n'+'#'+tv, 'n'+'#'+voiced)
         given = given.replace('m'+'#'+tv, 'm'+'#'+voiced)
         given = given.replace('l'+'#'+tv, 'l'+'#'+voiced)
+
+    return given
+
+
+def pot(given):       # должно быть в самом конце
+    obstr = ['k', 'p', 'c', 'cʰ', 'kʰ', 'tʰ', 
+             'pʰ', 't', 'k͈', 't͈', 'p͈', 'c͈']
+    for obs in obstr:
+        given = given.replace(obs+'-k', obs+'-k͈')
+        given = given.replace(obs+'-t', obs+'-t͈')
+        given = given.replace(obs+'-p', obs+'-p͈')
+        given = given.replace(obs+'-c', obs+'-c͈')
 
     return given
 
